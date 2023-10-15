@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll System</title>
+</head>
+<body>
+    <div class="main-container">
+        <div class="main-header">
+            <div class="main-title">工资管理系统</div>
+            <div class="sub-title">Payroll System</div>
+            {% block welcome_message %}
+            {% endblock %}
+        </div>
+        <div class="login-container">
+            {% block login_container %}
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

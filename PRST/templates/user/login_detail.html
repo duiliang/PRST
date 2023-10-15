@@ -1,0 +1,24 @@
+{% extends "user/background.html" %}
+{% block welcome_message%}
+<div class="welcome-message">
+    <div class="welcome-title">欢迎使用工资管理系统</div>
+    <div class="welcome-sub-title">Welcome to Payroll System</div>
+{% endblock %}
+{% block login_container %}
+    {% if kind == "Employee" %}
+        <div class="login-kind-title">员工登录</div>
+    {% else %}
+        <div class="login-kind-title">管理员登录</div>
+    {% endif %}
+    <div class="from">
+        <form method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+            <div class="submit-button">
+                <input type="submit" value="登录">
+                <a herf = "">注册</a>
+            </div>
+        </form>
+        <div class="return-button"><a href="{% url 'login' %}">返回上一页</a></div>
+    </div>
+{% endblock %}
