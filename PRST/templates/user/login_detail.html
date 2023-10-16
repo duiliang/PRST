@@ -3,6 +3,9 @@
 <div class="welcome-message">
     <div class="welcome-title">欢迎使用工资管理系统</div>
     <div class="welcome-sub-title">Welcome to Payroll System</div>
+    {% if from == "register" %}
+        <div class="welcome-sub-title">注册成功你的ID为{{ id }}，请记好id,如果遗忘请联系超级管理员，请登录</div>
+    {% endif %}
 {% endblock %}
 {% block login_container %}
     {% if kind == "Employee" %}
@@ -16,9 +19,9 @@
             {{form.as_p}}
             <div class="submit-button">
                 <input type="submit" value="登录">
-                <a herf = "">注册</a>
             </div>
         </form>
+        <a href = "{% url 'register' kind%}">注册</a>
         <div class="return-button"><a href="{% url 'login' %}">返回上一页</a></div>
     </div>
 {% endblock %}

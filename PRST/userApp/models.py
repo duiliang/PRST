@@ -13,13 +13,17 @@ GENDERS = (
     ('F', 'Female'),
     ('O', 'Other'),
 )
-
+# 定义月付款或者小时付款的枚举类型
+PAYMENT_KINDS = (
+    ('Hourly', 'Hourly'),
+    ('Monthly', 'Monthly'),
+)
 # 定义Employee类
 class Employee(models.Model):
     id = models.AutoField(primary_key=True)#ID: 员工的唯一标识符
     name = models.CharField(max_length=100)#Name: 员工的全名
     position = models.CharField(max_length=100)#Position: 员工在公司中的职位或角色
-    hour_or_month = models.BooleanField()#Hour_or_Month: 员工的工资计算方式 (Hourly or Monthly) True: Hourly, False: Monthly
+    hour_or_month = models.CharField(max_length=20,choices=PAYMENT_KINDS)#Hour_or_Month: 员工的工资计算方式 (Hourly or Monthly) True: Hourly, False: Monthly
     hourly_rate = models.FloatField(null=True, blank=True)#Hourly_Rate: 适用于按小时计费的员工 (与原HourlyRate合并)
     monthly_salary = models.FloatField(null=True, blank=True)#Monthly_Salary: 适用于月薪员工 (与原Salary合并，如果适用)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHODS)#Payment_Method: 员工选择的支付方式
@@ -29,7 +33,6 @@ class Employee(models.Model):
     password = models.CharField(max_length=50)#Password: 系统登录密码 (加密)  # 注意：实际应用中需要加密
     address = models.CharField(max_length=200)#Address: 联系地址
     phone_number = models.CharField(max_length=15)#Phone_Number: 联系电话
-    birth_date = models.DateField()#Birth_Date: 出生日期
     gender = models.CharField(max_length=1, choices=GENDERS)#Gender: 性别
     hour_limit = models.FloatField(null=True, blank=True)#Hour_Limit: 工时限制
     
