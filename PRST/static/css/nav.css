@@ -1,0 +1,84 @@
+body,p {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background: #ccc;
+}
+
+.nav {
+    background: #79982c;
+    width: 100%;
+}
+
+.nav a {
+    color: #ccc;
+    text-decoration: unset;
+}
+
+.nav .nav-title,
+.nav .name-logo,
+.nav .log-out  {
+    display: inline-block;
+    margin: 5px;
+}
+
+.nav p {
+    display: inline-block;
+    float: left;
+    padding-left: 10px;
+}
+
+.nav .nav-title {
+    font-size: 24px;
+    line-height: 26px;
+    height: 26px;
+    vertical-align: top;
+}
+
+
+.nav p.main-title {
+    margin-right: 10px;
+}
+
+.nav p.sub-title {
+    border-left: 3px solid #cccccc;
+}
+
+.nav .name-logo,
+.nav .log-out  {
+    float: right;
+    margin: 8px 5px 0;
+    vertical-align: top;
+}
+
+.nav .name-logo .user-name {
+    background: #ccc;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+
+    text-align: center;
+    line-height: 24px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.nav .name-logo .user-name a {
+    color: #4a2c98;
+}
+
+.nav .log-out a {
+    margin: 5px;
+    background: #ccc;
+    color: #4a2c98;
+    border-radius: 5px;
+    text-decoration: none;
+    padding: 0 5px;
+}

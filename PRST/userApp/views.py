@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from constants import INVALID_KIND
 from userApp.forms import EmpLoginForm, AdminLoginForm
-from userApp.cbvs import CreateEmployeeView, CreateAdminView
+from userApp.cbvs import CreateEmployeeView, CreateAdminView,DetailAdminView,DetailEmpView
 from userApp.models import Employee, Administrator
 def login(request, kind):
     if kind not in ["Employee", "Administrator"]:
@@ -77,4 +77,24 @@ def logout(request):
         del request.session['user']
     if request.session.get('id', ''):
         del request.session['id']
+    return redirect(reverse("login"))
+
+
+def show(request,kind):
+    func=None
+    if kind == "Employee":
+        func = DetailEmpView.as_view()
+    elif kind == "Administrator":
+        func = DetailAdminView.as_view()
+    else:
+        return HttpResponse(INVALID_KIND)
+    
+    pk = request.session.get('id')
+    if pk:
+        context = {
+            "name" :request.session.get('name',""),
+            "kind":request.session.get('kind',""),
+        }
+        print(context)
+        return func(request,pk=pk,context=context)
     return redirect(reverse("login"))

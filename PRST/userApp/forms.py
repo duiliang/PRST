@@ -69,3 +69,22 @@ class AdminRegisterForm(forms.ModelForm):
         if confirm_password != password:
             self._errors['confirm_password'] = self.error_class(['Password does not match.'])
         return cleaned_data
+
+class EmpShowForm(forms.ModelForm):
+    class Meta:
+        model = Employee
+        fields = '__all__'
+    def __init__(self):
+        super(EmpShowForm, self).__init__()
+        for field in self.fields.values():
+            field.widget.attrs['readonly'] = True
+
+
+class AdminShowForm(forms.ModelForm):
+    class Meta:
+        model = Administrator
+        fields = '__all__'
+    def __init__(self):
+        super(EmpShowForm, self).__init__()
+        for field in self.fields.values():
+            field.widget.attrs['readonly'] = True

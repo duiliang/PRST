@@ -1,8 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title%}{%endblock%}</title>
+    <link href="{% static 'css/nav.css' %}" rel="stylesheet">
 </head>
 <body>
     <div class="nav">
@@ -18,11 +20,14 @@
             </a>
         </div>
         <div class="log-out">
-            <a href='{%url "user" "logout"%}'>登出</a>
+            <a href='{%url  "logout"%}'>登出</a>
         </div>
         <div class="name-logo">
             <div class="user-name">
-                {{ info.name }}
+                <!-- <a href="{%url 'show' info.kind %}">
+                    {{ info.name.0 }}
+                </a> -->
+                {{ info.name.0 }}
             </div>
         </div>
     </div>

@@ -1,0 +1,142 @@
+body {
+    margin: 0;
+}
+
+.main-container {
+    position: absolute;
+    width: 100%;
+    height:100%;
+    background: #2c96534d;
+    background: linear-gradient(rgba(100, 230, 169, 0.2), rgba(145, 152, 229, 0.3)),
+        linear-gradient(#c291e560, #82982c80);
+}
+
+.main-header {
+    height: 45%;
+    text-align: center;
+    font-size: 40px;
+    color: #2c7b98;
+}
+
+.main-header .main-title {
+    font-size: 50px;
+    margin-top: 5%;
+}
+
+.main-header .welcome-message {
+    font-size: 26px;
+    margin-top: 60px;
+    color: #ff5722;
+}
+
+.login-container {
+    min-height: 500px;
+    height: 40%;
+    width: 400px;
+    margin: 0 auto;
+    background: #eee;
+    border-radius: 10px;
+    box-shadow: 0 0 15px 2px rgba(0, 0, 0, .33);
+    overflow: hidden;
+}
+
+.login-container .login-kind {
+    padding-top: 10%;
+    font-size: 30px
+}
+
+.login-container .login-kind a {
+    text-decoration: none;
+    background: #4a2c98;
+    color: #eeeeee;
+    padding: 10px;
+    text-align: center;
+    display: block;
+    width:50%;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+
+/* for login detail page  */
+.from {
+    min-height: 500px;  /* 或者使用您想要的任何其他值 */
+}
+
+.login-kind-title {
+    height: auto;
+    padding: 2%;
+    text-align: center;
+    color: #4d2f99;
+    width: 96%;
+    font-size: 22px;
+    display: block;
+    background: #ccc;
+    overflow: hidden
+}
+
+
+.login-container .form p,
+.login-container .form .submit-button {
+    width: 90%;
+    padding-top: 4%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", 
+        Verdana, Arial, sans-serif;
+
+}
+
+
+.login-container .form p label {
+    padding-right: 10px;
+    width: 80px;
+}
+
+.login-container .form p input {
+    clear: both;
+    padding: 8px;
+    width: 60%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-container .form .submit-button,
+.login-container .return-button {
+    margin: 5px auto 0;
+    padding-top: 20px;
+}
+
+.submit-button input,
+.submit-button a {
+    border: none;
+    text-decoration: none;
+    font-size: 18px;
+    background: #4a2c98;
+    color: #eeeeee;
+    padding: 5px 0;
+    text-align: center;
+    display: block;
+    width: 30%;
+    margin: 5px 10px;
+    border-radius: 10px
+}
+
+.return-button a{
+    border: none;
+    text-decoration: none;
+    font-size: 18px;
+    background: #cccccc;
+    color: #4a2c98;
+    padding: 5px 0;
+    text-align: center;
+    display: block;
+    width: 30%;
+    margin: 0 auto;
+    border-radius: 10px;
+}
