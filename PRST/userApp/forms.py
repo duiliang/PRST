@@ -16,7 +16,7 @@ class AdminLoginForm(forms.Form):
 
 
 class EmpRegisterForm(forms.ModelForm):
-    comfirm_password = forms.CharField(label="确认密码", max_length=50, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    confirm_password = forms.CharField(label="确认密码", max_length=50, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Employee
@@ -42,13 +42,14 @@ class EmpRegisterForm(forms.ModelForm):
         cleaned_data = super(EmpRegisterForm,self).clean()
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
+        #print(confirm_password, password)
         if confirm_password != password:
             self._errors['confirm_password'] = self.error_class(['Password does not match.'])
         return cleaned_data
 
 
 class AdminRegisterForm(forms.ModelForm):
-    comfirm_password = forms.CharField(label="确认密码", max_length=50, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    confirm_password = forms.CharField(label="确认密码", max_length=50, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Administrator
@@ -64,6 +65,7 @@ class AdminRegisterForm(forms.ModelForm):
         cleaned_data = super(AdminRegisterForm,self).clean()
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
+        #print(confirm_password, password)
         if confirm_password != password:
             self._errors['confirm_password'] = self.error_class(['Password does not match.'])
         return cleaned_data

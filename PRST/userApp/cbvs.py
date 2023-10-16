@@ -1,4 +1,4 @@
-from django.views.generic import CreateView
+from django.views.generic import CreateView,FormView
 from django.shortcuts  import reverse,redirect
 
 from userApp.models import Employee,Administrator
@@ -13,6 +13,7 @@ class CreateEmployeeView(CreateView):
     success_url = 'login'
 
     def form_valid(self, form):
+        print("in form_valid")
         #tmp_username = form.cleaned_data['username']
         new_employee = form.save(commit=False)
         new_employee.save()

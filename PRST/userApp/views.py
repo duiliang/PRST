@@ -20,7 +20,6 @@ def login(request, *args, **kwargs):
 
         if form.is_valid():
             id = form.cleaned_data["id"]
-
             temp_res = "hello, %s" % id
             return HttpResponse(temp_res)
         else:
@@ -38,10 +37,11 @@ def login(request, *args, **kwargs):
                 form = EmpLoginForm()
             else:
                 form = AdminLoginForm()
-        
         context['form'] = form
-        if request.GET.get('from_url'):
-            context['from_url'] = request.GET.get['from_url']
+        
+        if request.GET.get('from'):
+            context['from'] = request.GET['from']
+            print(context['from'])
 
     return render(request, 'user/login_detail.html', context)
 
@@ -51,6 +51,7 @@ def home(request):
 def register(request, kind):
     func = None
     if kind == "Employee":
+        
         func = CreateEmployeeView.as_view()
     elif kind == "Administrator":
         func = CreateAdminView.as_view()
