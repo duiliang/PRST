@@ -1,3 +1,65 @@
-from django.shortcuts import render
+from django.http.response import HttpResponse
+from django.shortcuts import render, reverse, redirect
 
-# Create your views here.
+from userApp.models import Employee, Administrator
+from constants import INVALID_KIND
+
+
+def get_user(request, kind):
+    if request.session.get('kind', '') != kind or kind not in ["Employee", "Administrator"]:
+        return None
+
+    uid = request.session.get('user', '')
+    if kind == "Employee":
+        Employee_set = Employee.objects.filter(id=uid)
+        if Employee_set.count() == 0:
+            return None
+        else:
+            return Employee_set[0]
+    else:
+        Administrator_set = Administrator.objects.filter(id=uid)
+        if Administrator_set.count() == 0:
+            return None
+        else:
+            return Administrator_set[0]
+
+def home(request, kind):
+    if kind == "Employee":
+        return employee_home(request)
+    elif kind == "Administrator":
+        return administrator_home(request)
+    return HttpResponse(INVALID_KIND)
+
+def employee_home(request):
+    kind = "Employee"
+    user = get_user(request, kind)
+
+    if not user:
+        return redirect('login', kind=kind)
+    
+    info = {
+        "name": user.username,
+        "kind": kind,
+    }
+
+    context = {
+        "info": info,
+    }
+    return render(request, 'business/nav.html', context)
+
+def administrator_home(request):
+    kind = "Administrator"
+    user = get_user(request, kind)
+
+    if not user:
+        return redirect('login', kind=kind)
+    
+    info = {
+        "name": user.username,
+        "kind": kind,
+    }
+
+    context = {
+        "info": info,
+    }
+    return render(request, 'business/nav.html', context)

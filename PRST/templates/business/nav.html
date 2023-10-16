@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title%}{%endblock%}</title>
+</head>
+<body>
+    <div class="nav">
+        <div class="nav-title">
+            <a href="{% url 'business' kind=info.kind %}">
+            <p class="main-title">员工管理系统</p>
+            <p class="sub-title">
+                {% if info.kind == "Employee" %}
+                    员工端
+                {% elif info.kind == "Administrator" %}
+                    普通管理员端
+                {% endif %}</p>
+            </a>
+        </div>
+        <div class="log-out">
+            <a href='{%url "user" "logout"%}'>登出</a>
+        </div>
+        <div class="name-logo">
+            <div class="user-name">
+                {{ info.name }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+    
+</body>
+</html>

@@ -1,16 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http.response import HttpResponse
+from django.urls import reverse
 
 from constants import INVALID_KIND
 from userApp.forms import EmpLoginForm, AdminLoginForm
 from userApp.cbvs import CreateEmployeeView, CreateAdminView
-
-def login(request, *args, **kwargs):
-    if not kwargs or kwargs.get("kind", "") not in ["Employee", "Administrator"]:
+from userApp.models import Employee, Administrator
+def login(request, kind):
+    if kind not in ["Employee", "Administrator"]:
         return HttpResponse(INVALID_KIND)
-
-    kind = kwargs["kind"]
-    context = {'kind': kind}
 
     if request.method == 'POST':
         if kind == "Employee":
@@ -20,31 +18,41 @@ def login(request, *args, **kwargs):
 
         if form.is_valid():
             id = form.cleaned_data["id"]
-            temp_res = "hello, %s" % id
-            return HttpResponse(temp_res)
-        else:
-            context['form'] = form
-    elif request.method == 'GET':
-        if request.GET.get('id'):
-            context['id'] = request.GET['id']
-            data = {'id': request.GET['id']}
             if kind == "Employee":
-                form = EmpLoginForm(data)
+                object_set = Employee.objects.filter(id=id)
             else:
-                form = AdminLoginForm(data)
+                object_set = Administrator.objects.filter(id=id)
+            if object_set.count() == 0:
+                form.add_error('id', '不存在的ID')
+            else:
+                user = object_set[0]
+                if form.cleaned_data["password"] != user.password:
+                    form.add_error('password', '密码错误')
+                else:
+                    request.session['kind'] = kind
+                    request.session['user'] = id
+                    request.session['id'] = user.id
+
+                    return redirect("business", kind=kind)
+        return render(request, 'user/login_detail.html', {'form': form, 'kind': kind})
+    else:
+        context = {"kind": kind}
+        if request.GET.get("id"):
+            id = request.GET.get("id")
+            context["id"] = id
+            if kind == "Employee":
+                form = EmpLoginForm(initial={"id": id})
+            else:
+                form = AdminLoginForm(initial={"id": id})
         else:
             if kind == "Employee":
                 form = EmpLoginForm()
             else:
                 form = AdminLoginForm()
-        context['form'] = form
-        
-        if request.GET.get('from'):
-            context['from'] = request.GET['from']
-            print(context['from'])
-
-    return render(request, 'user/login_detail.html', context)
-
+        context["form"] = form
+        if request.GET.get("from"):
+            context["from"] = request.GET.get("from")
+        return render(request, 'user/login_detail.html', context)
 def home(request):
     return render(request, 'user/login_home.html')
 
@@ -61,3 +69,12 @@ def register(request, kind):
         return func(request)
     else:
         return HttpResponse(INVALID_KIND)
+
+def logout(request):
+    if request.session.get('kind', ''):
+        del request.session['kind']
+    if request.session.get('user', ''):
+        del request.session['user']
+    if request.session.get('id', ''):
+        del request.session['id']
+    return redirect(reverse("login"))
