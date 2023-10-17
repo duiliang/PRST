@@ -1,6 +1,6 @@
 from typing import Any
 from django import forms
-from userApp.models import Employee,Administrator
+from userApp.models import Employee,Administrator,PAYMENT_METHODS
 
 
 class EmpLoginForm(forms.Form):
@@ -73,11 +73,10 @@ class AdminRegisterForm(forms.ModelForm):
 class EmpShowForm(forms.ModelForm):
     class Meta:
         model = Employee
-        fields = '__all__'
-    def __init__(self):
-        super(EmpShowForm, self).__init__()
-        for field in self.fields.values():
-            field.widget.attrs['readonly'] = True
+        fields = ['payment_method', 'payment_address', 'payment_cardID']
+        widgets = {
+            'payment_method': forms.Select(choices=PAYMENT_METHODS)
+        }
 
 
 class AdminShowForm(forms.ModelForm):

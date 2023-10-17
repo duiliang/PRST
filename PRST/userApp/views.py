@@ -95,6 +95,6 @@ def show(request,kind):
             "name" :request.session.get('name',""),
             "kind":request.session.get('kind',""),
         }
-        print(context)
+        # print(context)
         return func(request,pk=pk,context=context)
-    return redirect(reverse("login"))
+    return redirect("login")

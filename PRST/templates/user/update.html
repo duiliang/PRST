@@ -7,15 +7,17 @@
         ShowInfo
     </title>
     <link href="{% static 'css/register.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 
     <div class="register-container">
-        <div class="register-title">个人信息</div>
-        <div>
+        <div class="register-title">个人付款信息</div>
+        <form method="post" class="form">
             {% csrf_token %}
             {{form.as_p}}
-        </div>
+            <p><input type="submit" value="修改" class="submit-button"/></p>
+        </form>
         <div class="return-button"><a href="{% url 'business' kind %}">返回上一页</a></div>
 
     </div>

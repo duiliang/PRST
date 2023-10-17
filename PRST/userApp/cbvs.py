@@ -1,5 +1,5 @@
 from typing import Any
-from django.views.generic import CreateView,FormView,DetailView
+from django.views.generic import CreateView,FormView,DetailView,UpdateView
 from django.shortcuts  import reverse,redirect
 
 from userApp.models import Employee,Administrator
@@ -44,17 +44,19 @@ class CreateAdminView(CreateView):
         return redirect(base_url+"?id="+str(tmp_id)+"&from="+from_url+"&id="+str(tmp_id))
 
 
-class DetailEmpView(DetailView):
+class DetailEmpView(UpdateView):
     model = Employee
     form_class = EmpShowForm
     template_name = 'user/update.html'
 
     def get_context_data(self, **kwargs):
         context = super(DetailEmpView, self).get_context_data(**kwargs)
-        
         context.update(kwargs)
         context['kind'] = "Employee"
         return context
+    
+    def get_success_url(self):
+        return reverse("business",kwargs={'kind':"Employee"})
 
 
 class DetailAdminView(DetailView):
