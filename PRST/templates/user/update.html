@@ -8,6 +8,23 @@
     </title>
     <link href="{% static 'css/register.css' %}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#id_payment_method').change(function() {
+                var method = $(this).val();
+                if (method == 'Bank Transfer') {
+                    $('#address-field').show();
+                    $('#cardID-field').hide();
+                } else if (method == 'mailed') {
+                    $('#address-field').hide();
+                    $('#cardID-field').show();
+                } else {
+                    $('#address-field').hide();
+                    $('#cardID-field').hide();
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -15,7 +32,13 @@
         <div class="register-title">个人付款信息</div>
         <form method="post" class="form">
             {% csrf_token %}
-            {{form.as_p}}
+            <p>{{ form.payment_method }}</p>
+    <p id="address-field"  style="display:none;">
+        {{ form.payment_address }}
+    </p>
+    <p id="cardID-field" style="display:none;">
+        {{ form.payment_cardID }}
+    </p>
             <p><input type="submit" value="修改" class="submit-button"/></p>
         </form>
         <div class="return-button"><a href="{% url 'business' kind %}">返回上一页</a></div>
