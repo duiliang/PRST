@@ -1,7 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render, reverse, redirect
 
-from userApp.models import Employee, Administrator
+from userApp.models import Employee, Administrator,CommissionedEmployee
 from constants import INVALID_KIND
 
 
@@ -15,7 +15,14 @@ def get_user(request, kind):
         if Employee_set.count() == 0:
             return None
         else:
-            return Employee_set[0]
+            try:
+                user = CommissionedEmployee.objects.get(id=uid)
+            except CommissionedEmployee.DoesNotExist:
+                try:
+                    user = Employee.objects.get(id=uid)
+                except Employee.DoesNotExist:
+                    user = None
+        return user
     else:
         Administrator_set = Administrator.objects.filter(id=uid)
         if Administrator_set.count() == 0:
@@ -30,6 +37,7 @@ def home(request, kind):
         return administrator_home(request)
     return HttpResponse(INVALID_KIND)
 
+
 def employee_home(request):
     kind = "Employee"
     user = get_user(request, kind)
@@ -40,11 +48,14 @@ def employee_home(request):
     info = {
         "name": user.username,
         "kind": kind,
+        "user": user,
     }
 
     context = {
         "info": info,
     }
+    print(info)
+    print(info["user"].is_commissioned())
     return render(request, 'business/nav.html', context)
 
 def administrator_home(request):

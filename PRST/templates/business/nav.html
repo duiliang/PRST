@@ -35,6 +35,12 @@
     <div class="main-content">
         {% block content %}{% endblock %}
     </div>
-    
+    <div class="navbar">
+        <a href="">打卡</a>
+        <a href="">生成报告</a>
+        {% if info.user.is_commissioned %}
+            <a href="">维护采购表</a>
+        {% endif %}
+    </div>
 </body>
 </html>

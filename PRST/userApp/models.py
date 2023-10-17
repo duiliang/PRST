@@ -5,6 +5,7 @@ from datetime import datetime
 PAYMENT_METHODS = (
     ('Bank Transfer', 'Bank Transfer'),
     ('mailed', 'mailed'),  
+    ('Pick up', 'Pick up'),
 )
 
 # 定义性别的枚举类型
@@ -27,15 +28,18 @@ class Employee(models.Model):
     hourly_rate = models.FloatField(null=True, blank=True)#Hourly_Rate: 适用于按小时计费的员工 (与原HourlyRate合并)
     monthly_salary = models.FloatField(null=True, blank=True)#Monthly_Salary: 适用于月薪员工 (与原Salary合并，如果适用)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHODS)#Payment_Method: 员工选择的支付方式
-    payment_address = models.CharField(max_length=200,blank=True)#Payment_Address: 与所选支付方式相关的额外信息
-    payment_cardID = models.CharField(max_length=20,blank=True)#Payment_CardID: 与所选支付方式相关的额外信息
+    payment_address = models.CharField(max_length=200,blank=True,null=True)#Payment_Address: 与所选支付方式相关的额外信息
+    payment_cardID = models.CharField(max_length=20,blank=True,null=True)#Payment_CardID: 与所选支付方式相关的额外信息
     username = models.CharField(max_length=50)#Username: 系统登录用户名
     password = models.CharField(max_length=50)#Password: 系统登录密码 (加密)  # 注意：实际应用中需要加密
-    address = models.CharField(max_length=200)#Address: 联系地址
+    address = models.CharField(max_length=200,blank=True,null=True)#Address: 联系地址
     phone_number = models.CharField(max_length=15)#Phone_Number: 联系电话
     gender = models.CharField(max_length=1, choices=GENDERS)#Gender: 性别
     hour_limit = models.FloatField(null=True, blank=True)#Hour_Limit: 工时限制
-    
+    tax_off = models.FloatField(null=True, blank=True)#Tax_Off: 税减免
+    other_off = models.FloatField(null=True, blank=True)#Other_Off: 其他减免
+    social_security_number = models.CharField(max_length=20,blank=True,null=True)#Social_Security_Number: 社会保险号
+    pid = models.CharField(max_length=20,blank=True,null=True)#PID: 项目组号
     # 时间卡和报告将在其他模型中作为外键引用
     # timecards = models.ManyToManyField('Timecard')
     # reports = models.ManyToManyField('Report')
@@ -85,6 +89,9 @@ class Employee(models.Model):
     def update_timecard(timecard_id: int, charge_number: int, hours_worked: dict):
         # 实现更新时间卡逻辑
         pass
+    def is_commissioned(self):
+        # 实现判断员工是否为佣金员工逻辑
+        return False
 
 
 
@@ -106,6 +113,9 @@ class CommissionedEmployee(Employee):
     def delete_purchase_order(self, order_id: int):
         # 实现删除指定的采购订单逻辑
         pass
+    def is_commissioned(self):
+        # 实现判断员工是否为佣金员工逻辑
+        return True
 
 # 继续编写 Django 类，下一个是 Administrator 类
 # 请注意，以下代码是示意性的，并没有实际执行。在实际应用中需要更多的逻辑来实现这些方法。
