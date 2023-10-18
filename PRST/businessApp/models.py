@@ -52,21 +52,21 @@ class TimeCard(models.Model):
     def __str__(self):
         return f"{self.employee.name} - {self.work_date}"
 
-    def clean(self):
-        if self.end_time <= self.start_time:
-            raise ValidationError('End time must be after start time.')
+    # def clean(self):
+    #     if self.end_time <= self.start_time:
+    #         raise ValidationError('End time must be after start time.')
 
-         # 获取员工的最大工作时长
-        max_hours = self.employee.hour_limit
-        if max_hours is not None:
-        # 计算实际工作时长
-            delta = datetime.combine(date.min, self.end_time) - datetime.combine(date.min, self.start_time)
-            hours_worked = delta.seconds / 3600
-        # 如果实际工作时长超过最大时长，则自动设置为最大时长
-            if hours_worked > max_hours:
-                adjusted_end_time = datetime.combine(self.work_date, self.start_time) + timedelta(hours=max_hours)
-                self.end_time = adjusted_end_time.time()
-        self.work_time = self.hours_worked
+    #      # 获取员工的最大工作时长
+    #     max_hours = self.employee.hour_limit
+    #     if max_hours is not None:
+    #     # 计算实际工作时长
+    #         delta = datetime.combine(date.min, self.end_time) - datetime.combine(date.min, self.start_time)
+    #         hours_worked = delta.seconds / 3600
+    #     # 如果实际工作时长超过最大时长，则自动设置为最大时长
+    #         if hours_worked > max_hours:
+    #             adjusted_end_time = datetime.combine(self.work_date, self.start_time) + timedelta(hours=max_hours)
+    #             self.end_time = adjusted_end_time.time()
+    #     self.work_time = self.hours_worked
 
     
     def save(self, *args, **kwargs):

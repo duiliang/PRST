@@ -1,11 +1,14 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render, reverse, redirect
 from django.db.models import Q
+from datetime import datetime, timedelta, date
+from django.views.generic.edit import UpdateView
+from django.urls import reverse_lazy
 
 from userApp.models import Employee, Administrator,CommissionedEmployee
 from businessApp.models import TimeCard, PurchaseOrder
 from constants import INVALID_KIND, INVALID_REQUEST_METHOD
-from businessApp.forms import CreateTimecardForm,CreatePurchaseOrderForm
+from businessApp.forms import CreateTimecardForm,CreatePurchaseOrderForm,UpdatePurchaseOrderForm
 
 
 def get_user(request, kind):
@@ -90,18 +93,23 @@ def create_timecard(request):
     if request.method == 'POST':
         form = CreateTimecardForm(data=request.POST)
         form.employee = user
-        # if form.is_valid():
-        #     timecard = form.save(commit=False)
-        #     print(user.id)
-        #     timecard.employee = Employee.objects.get(id=user.id)
-        #     print(timecard.employee.id)
-        #     timecard.save()
-        #     return redirect(reverse("timecard_home", kwargs={"kind": "Employee"}))
-        timecard = form.save(commit=False)
-        timecard.employee = Employee.objects.get(id=user.id)
-        timecard.clean()
-        timecard.save()
-        return redirect(reverse("timecard_home", kwargs={"kind": "Employee"}))
+        if form.is_valid():
+            timecard = form.save(commit=False)
+            timecard.employee = Employee.objects.get(id=user.id)
+            if timecard.end_time <= timecard.start_time:
+                form.add_error('end_time', '结束时间必须在开始时间之后')
+                return render(request, 'business/create_timecard.html', {"form": form, "info": info})
+            if user.hour_limit is not None:
+                if timecard.end_time.hour - timecard.start_time.hour > user.hour_limit:
+                    form.add_error('end_time', '工作时间不能超过最大工作时间')
+                    return render(request, 'business/create_timecard.html', {"form": form, "info": info})
+            if TimeCard.objects.filter(employee=user, work_date=timecard.work_date).count() > 0:
+                form.add_error('work_date', '该日期已存在时间卡')
+                return render(request, 'business/create_timecard.html', {"form": form, "info": info})
+            delta = datetime.combine(date.min, timecard.end_time) - datetime.combine(date.min, timecard.start_time)
+            timecard.work_time = delta.seconds / 3600
+            timecard.save()
+            return redirect(reverse("timecard_home"))
     elif request.method == 'GET':
         form = CreateTimecardForm()
     else:
@@ -152,10 +160,10 @@ def delete_purchaseorder(request, order_id):
     user= get_user(request, "Employee")
     if not user:
         return redirect(reverse("login", kwargs={"kind": "Employee"}))
-    purchaseOrder = PurchaseOrder.objects.get(id=order_id)
+    purchaseOrder = PurchaseOrder.objects.get(order_id=order_id)
     purchaseOrder.delete_order()
     #返回等待修改
-    return redirect(reverse("home", kwargs={"kind": "Employee"}))
+    return redirect(reverse("purchaseorder_home"))
 
 def purchaseorder_home(request):
     user = get_user(request, "Employee")
@@ -167,6 +175,7 @@ def purchaseorder_home(request):
         "user": user,
     }
     q = Q(commissioned_employee=user)
+    print(q)
     is_search = False
     search_key = ""
     if request.method == 'POST':
@@ -180,7 +189,7 @@ def purchaseorder_home(request):
     if is_search:
         context["search_key"] = search_key
         q = q & (Q(id__icontains=search_key))
-    context["purchaseorder_list"] = PurchaseOrder.objects.filter(q).order_by('order_date')
+    context["order_list"] = PurchaseOrder.objects.filter(q).order_by('order_date')
     return render(request, 'business/purchaseorder.html', context)
 
 def view_order_detail(request,order_id):
@@ -192,11 +201,33 @@ def view_order_detail(request,order_id):
         "kind": "Employee",
         "user": user,
     }
-    purchaseOrder = PurchaseOrder.objects.get(id=order_id)
+    purchaseOrder = PurchaseOrder.objects.get(order_id=order_id)
     context = {
         "info": info,
     }
     context["purchaseorder"] = purchaseOrder
     return render(request, 'business/purchaseorder_detial.html', context)
-def update_order():
+# class sub_update_order(UpdateView):
+#     model = PurchaseOrder
+#     form_class = UpdatePurchaseOrderForm
+#     template_name = 'business/update_purchaseorder.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super(sub_update_order,self).get_context_data(**kwargs)
+#         context.update(kwargs)
+#         return context
+    
+#     def get_success_url(self):
+#         pass
+#         # return reverse_lazy('purchaseorder_home')
+
+def update_order(request,order_id):
     pass
+#     user = get_user(request, "Employee")
+#     if not user:
+#         pass
+#         # return redirect(reverse("login", kwargs={"kind": "Employee"}))
+#     func = sub_update_order.as_view()
+#     pk = order_id
+#     return func(request,pk=pk)
+    

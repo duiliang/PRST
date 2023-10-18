@@ -30,6 +30,14 @@ class CreatePurchaseOrderForm(forms.ModelForm):
             'order_date': DatePickerInput(),
         }
 
+class UpdatePurchaseOrderForm(CreatePurchaseOrderForm):
+    class Meta:
+        model = PurchaseOrder
+        fields = ['client_contact', 'client_billing_address', 'purchased_products', 'order_amount', 'order_date']
+        widgets = {
+            'order_date': DatePickerInput(),
+        }
+
 
 
         

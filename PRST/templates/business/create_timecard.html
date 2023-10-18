@@ -1,11 +1,16 @@
 {% extends "business/nav.html" %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
 {% block title %}提交打卡{% endblock %}
 {% block content %}
     <h3>提交打卡</h3>
     <div class = "create_timecard_from">
         <form method="post">
             {% csrf_token %}
-            {{form.as_p}}
+            <!-- {{form.as_p}} -->
+            {% bootstrap_form form %}
             <div class="create_timecard_submit">
                 <input type="submit" value="提交" />
                 <input type="button" value="返回" onclick='window.open("{% url 'business' "Employee"%}")'/>
@@ -13,4 +18,5 @@
             </div>
         </form>
     </div>
+    <br><br><br><br><br><br><br><br><br><br><br>
 {% endblock %}
