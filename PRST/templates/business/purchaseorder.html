@@ -1,0 +1,46 @@
+{% extends "business/nav.html" %}
+{% block title %}Purchase Order Page{% endblock %}
+{% block content %}
+    <div class="main-container">
+        <div class="main-bar">
+            <form class="search-form" method="post">
+                {% csrf_token %}
+                <input class="input" id="search-key" type="text" name="search" {% if search_key != None %}value="{{ search_key }}" {% endif %}/>
+                <input class="button" type="submit" value="搜索订单" />
+            </form>
+            <input class="button right-button" type="button" value="创建订单"  onclick='window.open("{% url 'create_purchaseorder' %}")' />
+        </div>
+        <table class="item-list PurchaseOrder-list">
+            <thead>
+                <tr>
+                    <th class="PurchaseOrder-no">订单编号</th>
+                    <th class="PurchaseOrder-employee">委托员工</th>
+                    <th class="PurchaseOrder-contact">客户联系</th>
+                    <th class="PurchaseOrder-address">计费地址</th>
+                    <th class="PurchaseOrder-products">购买的产品</th>
+                    <th class="PurchaseOrder-date">订单日期</th>
+                    <th class="PurchaseOrder-amount">订单金额</th>
+                    <th class="PurchaseOrder-operation">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in order_list %}
+                    <tr id="PurchaseOrder-id-{{ order.order_id }}">
+                        <td class="PurchaseOrder-no">{{ order.order_id }}</td>
+                        <td class="PurchaseOrder-employee">{{ order.commissioned_employee.name }}</td>
+                        <td class="PurchaseOrder-contact">{{ order.client_contact }}</td>
+                        <td class="PurchaseOrder-address">{{ order.client_billing_address }}</td>
+                        <td class="PurchaseOrder-products">{{ order.purchased_products }}</td>
+                        <td class="PurchaseOrder-date">{{ order.order_date }}</td>
+                        <td class="PurchaseOrder-amount">{{ order.order_amount }}</td>
+                        <td class="PurchaseOrder-operation">
+                            <input class="button right-button" type="button" value="查看详情"
+                                   onclick='location.href="{% url 'view_order_detail' order.order_id %}"' />
+                            <!-- 其他操作按钮，根据需要添加 -->
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

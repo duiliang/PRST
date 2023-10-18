@@ -45,7 +45,7 @@ class TimeCard(models.Model):
     end_time = models.TimeField()  # 结束工作时间
     is_submitted = models.BooleanField(default=False)  # 是否已提交
     submitted_date = models.DateField( null=True, blank=True)  # 提交日期
-
+    work_time = models.FloatField(null=True, blank=True)  # 工作时间
     class Meta:
         unique_together = ('employee', 'work_date')  # 同一天只能有一张时间卡
 
@@ -53,7 +53,6 @@ class TimeCard(models.Model):
         return f"{self.employee.name} - {self.work_date}"
 
     def clean(self):
-        super().clean()
         if self.end_time <= self.start_time:
             raise ValidationError('End time must be after start time.')
 
@@ -67,17 +66,19 @@ class TimeCard(models.Model):
             if hours_worked > max_hours:
                 adjusted_end_time = datetime.combine(self.work_date, self.start_time) + timedelta(hours=max_hours)
                 self.end_time = adjusted_end_time.time()
+        self.work_time = self.hours_worked
 
     
     def save(self, *args, **kwargs):
         self.clean()
+        self.submit_timecard()
         super().save(*args, **kwargs)
 
     def submit_timecard(self):
         if not self.is_submitted:
             self.is_submitted = True
             self.submitted_date = timezone.now().date()
-            self.save()
+            #self.save()
 
     @property
     def hours_worked(self):

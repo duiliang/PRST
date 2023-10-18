@@ -1,9 +1,17 @@
 {% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title%}{%endblock%}</title>
+    {% load bootstrap4 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+    {{ form.media }}
     <link href="{% static 'css/nav.css' %}" rel="stylesheet">
 </head>
 <body>
@@ -36,10 +44,10 @@
         {% block content %}{% endblock %}
     </div>
     <div class="navbar">
-        <a href="">打卡</a>
+        <a href="{% url 'timecard_home' %}">打卡</a>
         <a href="">生成报告</a>
         {% if info.user.is_commissioned %}
-            <a href="">维护采购表</a>
+            <a href="{% url 'purchaseorder_home' %}">维护采购表</a>
         {% endif %}
     </div>
 </body>

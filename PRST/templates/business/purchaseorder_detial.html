@@ -1,0 +1,36 @@
+{% extends "purchaseorder/nav.html" %}
+{% block title %}订单详情{% endblock %}
+{% block content %}
+    <h3>订单详情<input class="button right-button" type="button" value="返回主页"
+                   onclick='window.open("{% url 'purchaseorder_home'%}")'/></h3>
+    <table class="item-list purchaseorder-detail-list">
+        <thead>
+            <tr>
+                <th>订单编号</th>
+                <th>客户联系</th>
+                <th>客户账单地址</th>
+                <th>购买的产品</th>
+                <th>订单日期</th>
+                <th>订单金额</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ purchaseorder.order_id }}</td>
+                <td>{{ purchaseorder.client_contact }}</td>
+                <td>{{ purchaseorder.client_billing_address }}</td>
+                <td>{{ purchaseorder.purchased_products }}</td>
+                <td>{{ purchaseorder.order_date }}</td>
+                <td>{{ purchaseorder.order_amount }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <tr>
+        <td>
+            <input class="button" type="button" value="删除"
+                    onclick='window.open("{% url 'delete_purchaseorder' purchaseorder.order_id%}")'/>
+            <input class="button"type="button" value="更改"
+                    onclick='window.open("{% url 'update_purchaseorder' purchaseorder.order_id%}")'>
+        </td>
+    </tr>
+{% endblock %}

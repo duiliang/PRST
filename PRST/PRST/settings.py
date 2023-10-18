@@ -32,8 +32,11 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    #'datetimewidget',
     'jazzmin',
-    "django_flatpickr",
+    #"django_flatpickr",
+    "bootstrap_datepicker_plus",
+    "bootstrap4",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

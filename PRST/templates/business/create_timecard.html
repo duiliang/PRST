@@ -1,0 +1,16 @@
+{% extends "business/nav.html" %}
+{% block title %}提交打卡{% endblock %}
+{% block content %}
+    <h3>提交打卡</h3>
+    <div class = "create_timecard_from">
+        <form method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+            <div class="create_timecard_submit">
+                <input type="submit" value="提交" />
+                <input type="button" value="返回" onclick='window.open("{% url 'business' "Employee"%}")'/>
+
+            </div>
+        </form>
+    </div>
+{% endblock %}
