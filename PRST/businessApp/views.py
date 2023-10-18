@@ -207,27 +207,30 @@ def view_order_detail(request,order_id):
     }
     context["purchaseorder"] = purchaseOrder
     return render(request, 'business/purchaseorder_detial.html', context)
-# class sub_update_order(UpdateView):
-#     model = PurchaseOrder
-#     form_class = UpdatePurchaseOrderForm
-#     template_name = 'business/update_purchaseorder.html'
+class sub_update_order(UpdateView):
+    model = PurchaseOrder
+    form_class = UpdatePurchaseOrderForm
+    template_name = 'business/update_purchaseorder.html'
 
-#     def get_context_data(self, **kwargs):
-#         context = super(sub_update_order,self).get_context_data(**kwargs)
-#         context.update(kwargs)
-#         return context
+    def get_context_data(self, **kwargs):
+        context = super(sub_update_order,self).get_context_data(**kwargs)
+        context.update(kwargs)
+        context['info'] = {
+            "name": self.request.session.get('user', ''),
+            "kind": "Employee",
+        }
+        return context
     
-#     def get_success_url(self):
-#         pass
-#         # return reverse_lazy('purchaseorder_home')
+    def get_success_url(self):
+        pass
+        return reverse_lazy('purchaseorder_home')
 
 def update_order(request,order_id):
-    pass
-#     user = get_user(request, "Employee")
-#     if not user:
-#         pass
-#         # return redirect(reverse("login", kwargs={"kind": "Employee"}))
-#     func = sub_update_order.as_view()
-#     pk = order_id
-#     return func(request,pk=pk)
+    user = get_user(request, "Employee")
+    if not user:
+        pass
+        return redirect(reverse("login", kwargs={"kind": "Employee"}))
+    func = sub_update_order.as_view()
+    pk = order_id
+    return func(request,pk=pk)
     

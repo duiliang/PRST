@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from businessApp.models import TimeCard,PurchaseOrder
 
 # 定义支付方式的枚举类型
 PAYMENT_METHODS = (
@@ -93,6 +94,37 @@ class Employee(models.Model):
         # 实现判断员工是否为佣金员工逻辑
         return False
 
+    def calculate_salary(self, start_date, end_date):
+        # 对于月薪员工
+        if self.hour_or_month == 'Monthly':
+            salary = self.monthly_salary
+        # 对于小时工
+        elif self.hour_or_month == 'Hourly':
+            # 获取指定日期范围内的时间卡
+            timecards = TimeCard.objects.filter(employee=self, work_date__range=(start_date, end_date))
+            # 初始化总工资为0
+            total_salary = 0
+            for timecard in timecards:
+                regular_hours = min(timecard.hours_worked, 8)  # 正常工作小时（最多8小时）
+                overtime_hours = max(timecard.hours_worked - 8, 0)  # 加班小时
+                # 计算每张时间卡的工资，正常小时按正常费率计算，加班小时按1.5倍费率计算
+                total_salary += (regular_hours * self.hourly_rate) + (overtime_hours * self.hourly_rate * 1.5)
+            salary = total_salary
+        else:
+            raise ValueError(f'Invalid payment type for employee {self.id}')
+
+        # 如果员工是佣金员工，添加佣金到工资中
+        if isinstance(self, CommissionedEmployee):
+            # 获取指定日期范围内的采购订单
+            purchase_orders = PurchaseOrder.objects.filter(commissioned_employee=self, order_date__range=(start_date, end_date))
+            total_sales_amount = sum(order.order_amount for order in purchase_orders)
+            commission = total_sales_amount * self.commission_rate
+            salary += commission
+
+        # 如果需要，可以在此处应用其他工资调整或扣除
+        # ...
+
+        return salary
 
 
 # 定义 CommissionedEmployee 类
