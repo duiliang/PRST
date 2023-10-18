@@ -45,7 +45,7 @@
     </div>
     <div class="navbar">
         <a href="{% url 'timecard_home' %}">打卡</a>
-        <a href="">生成报告</a>
+        <a href="{% url 'report_home' %}">生成报告</a>
         {% if info.user.is_commissioned %}
             <a href="{% url 'purchaseorder_home' %}">维护采购表</a>
         {% endif %}

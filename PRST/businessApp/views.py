@@ -4,10 +4,12 @@ from django.db.models import Q
 from datetime import datetime, timedelta, date
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
+from .forms import ReportForm
+import csv
 
 from userApp.models import Employee, Administrator,CommissionedEmployee
 from businessApp.models import TimeCard, PurchaseOrder
-from constants import INVALID_KIND, INVALID_REQUEST_METHOD
+from constants import INVALID_KIND, INVALID_REQUEST_METHOD,calculate_salary
 from businessApp.forms import CreateTimecardForm,CreatePurchaseOrderForm,UpdatePurchaseOrderForm
 
 
@@ -175,11 +177,11 @@ def purchaseorder_home(request):
         "user": user,
     }
     q = Q(commissioned_employee=user)
-    print(q)
     is_search = False
     search_key = ""
     if request.method == 'POST':
-        search_key = request.POST.get("search_key")
+        search_key = request.POST.get("search")
+        print(request.POST)
         if search_key:
             is_search = True
     context = {
@@ -188,7 +190,8 @@ def purchaseorder_home(request):
     context["search_key"] = ""
     if is_search:
         context["search_key"] = search_key
-        q = q & (Q(id__icontains=search_key))
+        q = q & (Q(order_id__icontains=search_key))
+        print(search_key)
     context["order_list"] = PurchaseOrder.objects.filter(q).order_by('order_date')
     return render(request, 'business/purchaseorder.html', context)
 
@@ -233,4 +236,46 @@ def update_order(request,order_id):
     func = sub_update_order.as_view()
     pk = order_id
     return func(request,pk=pk)
+
+#report
+def get_report(request):
+    user = get_user(request, "Employee")
+    info = {   
+        "name": user.username,
+        "kind": "Employee",
+        "user": user,
+    }
+    if not user:
+        return redirect(reverse("login", kwargs={"kind": "Employee"}))
+    if request.method == 'GET':
+        form = ReportForm()
+    elif request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            
+            # 创建一个HTTP响应对象，以便将CSV文件发送到客户端
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="report.csv"'
+
+            writer = csv.writer(response)
+
+            # 写入CSV文件的标题行
+            writer.writerow(['Name', 'Total Work Hours', 'Total Commission', 'Total Salary'])
+            timecard = TimeCard.objects.filter(employee=user, work_date__range=(start_date, end_date))
+            total_work_hours = sum(timecardone.hours_worked for timecardone in timecard)
+            if isinstance(user, CommissionedEmployee):
+                purchase_orders = PurchaseOrder.objects.filter(commissioned_employee=user, order_date__range=(start_date, end_date))
+                total_sales_amount = sum(order.order_amount for order in purchase_orders)
+                total_commission = total_sales_amount * user.commission_rate
+            else:
+                total_commission = 0
+            total_salary = calculate_salary(user.id, start_date, end_date)
+            writer.writerow([user.name, total_work_hours, total_commission, total_salary])
+            return response
+    else:
+        return HttpResponse(INVALID_REQUEST_METHOD)
+    return render(request, 'business/report.html', {"form": form, "info": info})
     
+

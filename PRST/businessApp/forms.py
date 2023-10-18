@@ -39,5 +39,7 @@ class UpdatePurchaseOrderForm(CreatePurchaseOrderForm):
         }
 
 
-
+class ReportForm(forms.Form):
+    start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=True)
+    end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=True)
         

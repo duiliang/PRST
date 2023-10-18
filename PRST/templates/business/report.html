@@ -1,0 +1,20 @@
+{% extends "business/nav.html" %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+{% block title %}生成报告{% endblock %}
+{% block content %}
+    <h3>生成报告</h3>
+    <div class = "create_report">
+        <form method="post">
+            {% csrf_token %}
+            <!-- {{form.as_p}} -->
+            {% bootstrap_form form %}
+            <div class="create_report_submit">
+                <input type="submit" value="提交" />
+            </div>
+        </form>
+    </div>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br>
+{% endblock %}

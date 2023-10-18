@@ -10,4 +10,5 @@ urlpatterns = [
     path('Employee/purchaseorder/view_order_detail/<int:order_id>', view_order_detail, name="view_order_detail"),
     path('Employee/purchaseorder/update_order/<int:order_id>', update_order, name="update_purchaseorder"),
     path('Employee/purchaseorder/delete_order/<int:order_id>', delete_purchaseorder, name="delete_purchaseorder"),
+    path('Employee/report/', get_report, name="report_home"),
 ]
