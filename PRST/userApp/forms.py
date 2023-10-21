@@ -87,3 +87,8 @@ class AdminShowForm(forms.ModelForm):
         super(EmpShowForm, self).__init__()
         for field in self.fields.values():
             field.widget.attrs['readonly'] = True
+
+
+class DateRangeForm(forms.Form):
+    start_date = forms.DateField(widget=forms.SelectDateWidget())
+    end_date = forms.DateField(widget=forms.SelectDateWidget())

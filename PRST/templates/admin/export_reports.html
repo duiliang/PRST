@@ -1,0 +1,12 @@
+<!-- templates/admin/export_reports.html -->
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <h1>Select date range</h1>
+
+  <form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="apply" value="Export Reports">
+  </form>
+{% endblock %}
