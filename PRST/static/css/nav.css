@@ -9,7 +9,7 @@ html, body {
 }
 
 body {
-    background: #ccc;
+    background: #fdfdfd;
 }
 
 .nav {
@@ -104,3 +104,87 @@ body {
     color: black;
 }
 
+/* purchase order */
+/* 通用样式 */
+.main-container {
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: 80%;
+}
+
+.main-bar {
+    margin-bottom: 20px;
+}
+
+.search-form {
+    display: inline-block;
+}
+
+.input {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #2980b9;
+}
+
+.right-button {
+    float: right;
+}
+
+/* 表格样式 */
+.item-list {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.item-list th, .item-list td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 针对Purchase Order表格的特定样式 */
+.PurchaseOrder-list th {
+    background-color: #34495e;
+    color: white;
+}
+
+.PurchaseOrder-list tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.PurchaseOrder-list tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.PurchaseOrder-operation input {
+    margin-right: 5px;
+}
+.main-container {
+    backdrop-filter: blur(10px); /* 添加虚化效果 */
+    background-color: rgba(255, 255, 255, 0.7); /* 设置背景颜色为半透明 */
+ 
+}
+
+/* 为表单输入框添加虚化效果 */
+.input {
+    backdrop-filter: blur(5px); /* 添加虚化效果 */
+    background-color: rgba(255, 255, 255, 0.7); /* 设置背景颜色为半透明 */
+
+}

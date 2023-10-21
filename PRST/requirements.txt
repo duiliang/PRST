@@ -1,0 +1,17 @@
+asgiref @ file:///home/conda/feedstock_root/build_artifacts/asgiref_1671589829431/work
+beautifulsoup4==4.12.2
+Django @ file:///home/conda/feedstock_root/build_artifacts/django_1680693679482/work
+django-bootstrap-datepicker-plus==5.0.4
+django-bootstrap4==23.2
+django-datetime-widget==0.9.3
+django-flatpickr==2.0.1
+django-jazzmin==2.6.0
+Jinja2==3.1.2
+MarkupSafe==2.1.2
+mysqlclient==2.1.1
+pydantic==1.10.13
+PyMySQL @ file:///home/conda/feedstock_root/build_artifacts/pymysql_1680003278958/work
+pytz==2023.3.post1
+soupsieve==2.5
+sqlparse @ file:///home/conda/feedstock_root/build_artifacts/sqlparse_1681817562700/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1678559861143/work
