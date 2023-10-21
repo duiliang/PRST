@@ -2,7 +2,7 @@ from django import forms
 from .models import Employee, TimeCard, CommissionedEmployee, PurchaseOrder
 #from django_flatpickr.widgets import TimePickerInput ,DatePickerInput
 #from datetimewidget.widgets import DateTimeWidget, TimeWidget, DateWidget
-from bootstrap_datepicker_plus.widgets import TimePickerInput,DatePickerInput
+#from bootstrap_datepicker_plus.widgets import TimePickerInput,DatePickerInput
 class CreateTimecardForm(forms.ModelForm):
     employee = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False, widget=forms.HiddenInput())
     class Meta:
@@ -27,7 +27,7 @@ class CreatePurchaseOrderForm(forms.ModelForm):
         model = PurchaseOrder
         fields = ['client_contact', 'client_billing_address', 'purchased_products', 'order_amount', 'order_date']
         widgets = {
-            'order_date': DatePickerInput(),
+            'work_date': forms.SelectDateWidget(),
         }
 
 class UpdatePurchaseOrderForm(CreatePurchaseOrderForm):
@@ -35,7 +35,7 @@ class UpdatePurchaseOrderForm(CreatePurchaseOrderForm):
         model = PurchaseOrder
         fields = ['client_contact', 'client_billing_address', 'purchased_products', 'order_amount', 'order_date']
         widgets = {
-            'order_date': DatePickerInput(),
+            'work_date': forms.SelectDateWidget(),
         }
 
 

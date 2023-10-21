@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     #'datetimewidget',
     'jazzmin',
     #"django_flatpickr",
-    "bootstrap_datepicker_plus",
+    #"bootstrap_datepicker_plus",
     "bootstrap4",
     'django.contrib.admin',
     'django.contrib.auth',
